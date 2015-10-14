@@ -1,0 +1,29 @@
+{
+  "name": "alt-router",
+  "version": "1.0.0",
+  "description": "Connect react-router to alt",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:altjs/alt-router.git"
+  },
+  "keywords": [
+    "react-router",
+    "alt",
+    "router",
+    "flux"
+  ],
+  "author": "Josh Perez <josh@goatslacker.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/altjs/alt-router/issues"
+  },
+  "homepage": "https://github.com/altjs/alt-router",
+  "devDependencies": {
+    "react": "0.14.0",
+    "react-router": "1.0.0-rc3"
+  }
+}
