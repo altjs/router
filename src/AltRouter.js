@@ -51,7 +51,7 @@ const dispatchable = (flux, action) => (state, pathname, query) => {
 
 export default class AltRouter extends React.Component {
   static contextTypes = {
-    flux: React.PropTypes.object.isRequired,
+    flux: React.PropTypes.object,
   }
 
   constructor(props, context) {
