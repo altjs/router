@@ -60,7 +60,9 @@ export default class AltRouter extends React.Component {
     const flux = props.flux || context.flux
 
     this.history = props.history
-    this.routes = props.routes(flux)
+    this.routes = typeof props.routes === 'function'
+      ? props.routes(flux)
+      : props.routes
 
     const store = flux.createStore(makeHistoryStore(this.history))
 
