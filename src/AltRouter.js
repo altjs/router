@@ -1,6 +1,27 @@
 import React from 'react'
 import { Router } from 'react-router'
 
+const isRouteEqual = (prevState, nextState) => {
+  if (prevState === nextState) return true
+  if (prevState.pathname !== nextState.pathname) return false
+  if (prevState.search !== nextState.search) return false
+
+  const a = prevState.state
+  const b = nextState.state
+
+  for (const k in a) {
+    if (a.hasOwnProperty(k) && (!b.hasOwnProperty(k) || a[k] !== b[k])) {
+      return false
+    }
+  }
+  for (const k in b) {
+    if (b.hasOwnProperty(k) && !a.hasOwnProperty(k)) {
+      return false
+    }
+  }
+  return true
+}
+
 export const pushState = {
   id: 'router/history/pushedState',
   dispatch: x => x,
@@ -28,21 +49,28 @@ const makeHistoryStore = history => ({
     }
   },
 
-  reduce(currentState, payload) {
-    if (!payload.data) return currentState
+  bindListeners: {
+    push: pushState.id,
+    replace: replaceState.id,
+    update: updatedHistory.id,
+  },
 
-    const { state, pathname, query } = payload.data
+  push(data) {
+    const { state, pathname, query } = data
+    history.pushState(state, pathname, query)
+    this.setState(data)
+  },
 
-    if (payload.action === pushState.id) {
-      history.pushState(state, pathname, query)
-    } else if (payload.action === replaceState.id) {
-      history.replaceState(state, pathname, query)
-    } else if (payload.action === updatedHistory.id) {
-      return payload.data
-    } else {
-      return currentState
-    }
-  }
+  replace(data) {
+    const { state, pathname, query } = data
+    history.replaceState(state, pathname, query)
+    this.setState(data)
+  },
+
+  update(data) {
+    this.setState(data)
+    this.preventDefault()
+  },
 })
 
 const dispatchable = (flux, action) => (state, pathname, query) => {
@@ -72,8 +100,13 @@ export default class AltRouter extends React.Component {
       store,
     }
 
+    let prevState = {}
+
     this.historyListener = this.history.listen((routerState) => {
-      setTimeout(() => flux.dispatch(updatedHistory, routerState))
+      if (!isRouteEqual(prevState, routerState)) {
+        setTimeout(() => flux.dispatch(updatedHistory, routerState))
+        prevState = routerState
+      }
     })
   }
 
