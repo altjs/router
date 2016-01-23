@@ -105,6 +105,7 @@ export default class AltRouter extends React.Component {
     this.historyListener = this.history.listen((routerState) => {
       if (!isRouteEqual(prevState, routerState)) {
         setTimeout(() => flux.dispatch(updatedHistory, routerState))
+        props.onRouteUpdated(routerState, prevState);
         prevState = routerState
       }
     })

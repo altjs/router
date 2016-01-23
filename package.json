@@ -4,7 +4,8 @@
   "description": "Connect react-router to alt",
   "main": "lib/AltRouter.js",
   "scripts": {
-    "build": "babel src --out-dir lib --stage 0"
+    "build": "babel src --out-dir lib --stage 0",
+    "prepublish": "npm run build"
   },
   "repository": {
     "type": "git",
