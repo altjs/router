@@ -77,6 +77,10 @@ const dispatchable = (flux, action) => (state, pathname, query) => {
   return flux.dispatch(action, { state, pathname, query })
 }
 
+const nextTick = (flux, action) => (state, pathname, query) => {
+  setTimeout(() => flux.dispatch(action, { state, pathname, query }))
+}
+
 export default class AltRouter extends React.Component {
   static contextTypes = {
     flux: React.PropTypes.object,
@@ -97,6 +101,8 @@ export default class AltRouter extends React.Component {
     flux.router = {
       pushState: dispatchable(flux, pushState),
       replaceState: dispatchable(flux, replaceState),
+      pushStateAsync: nextTick(flux, pushState),
+      replaceStateAsync: nextTick(flux, replaceState),
       store,
     }
 
